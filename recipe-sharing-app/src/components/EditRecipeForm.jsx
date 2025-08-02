@@ -6,22 +6,24 @@ const EditRecipeForm = ({ recipe }) => {
   const [description, setDescription] = useState(recipe.description);
   const updateRecipe = useRecipeStore(state => state.updateRecipe);
 
-  const handleUpdate = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault(); // ✅ Make sure this line is present
     updateRecipe({ id: recipe.id, title, description });
   };
 
   return (
-    <form onSubmit={handleUpdate}>
+    <form onSubmit={handleSubmit}>
       <input
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        required
       />
       <br />
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        required
       />
       <br />
       <button type="submit">Update Recipe</button>
