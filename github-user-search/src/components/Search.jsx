@@ -1,79 +1,68 @@
 import { useState } from 'react';
-import { fetchAdvancedUsers } from '../services/githubService';
+import { fetchUserData } from '../services/githubService';
 
 const Search = () => {
   const [username, setUsername] = useState('');
-  const [location, setLocation] = useState('');
-  const [minRepos, setMinRepos] = useState('');
-  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    setError('');
-    setUsers([]);
     setLoading(true);
-    try {
-      const results = await fetchUserData(username);
+    setError('');
+    setUser(null);
 
-      setUsers(results);
-    } catch (err) {
-      setError("Looks like we cant find the user");
+    try {
+      const result = await fetchUserData(username);
+      setUser(result[0]);
+    } catch {
+      setError('Looks like we can’t find the user');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-4">
-      <form onSubmit={handleSubmit} className="grid gap-4 grid-cols-1 sm:grid-cols-2">
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
-          className="p-2 border rounded"
-        />
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder="Location"
-          className="p-2 border rounded"
-        />
-        <input
-          type="number"
-          value={minRepos}
-          onChange={(e) => setMinRepos(e.target.value)}
-          placeholder="Min Repositories"
-          className="p-2 border rounded"
-        />
-        <button
-          type="submit"
-          className="col-span-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-        >
-          Search
-        </button>
-      </form>
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 via-white to-purple-100 p-4">
+      <div className="max-w-xl mx-auto mt-10 bg-white shadow-xl rounded-xl p-6">
+        <h1 className="text-2xl font-bold mb-4 text-center text-gray-800">🔍 GitHub User Search</h1>
 
-      {loading && <p className="text-center mt-4">Loading...</p>}
-      {error && <p className="text-center text-red-500 mt-4">{error}</p>}
+        <form onSubmit={handleSearch} className="flex flex-col gap-4">
+          <input
+            type="text"
+            className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter GitHub username..."
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition-all"
+          >
+            Search
+          </button>
+        </form>
 
-      <div className="mt-6 space-y-4">
-        {users.map(user => (
-          <div key={user.id} className="border p-4 rounded shadow">
-            <div className="flex items-center space-x-4">
-              <img src={user.avatar_url} alt={user.login} className="w-16 h-16 rounded-full" />
-              <div>
-                <h3 className="text-lg font-semibold">{user.login}</h3>
-                <a href={user.html_url} className="text-blue-500" target="_blank" rel="noreferrer">
-                  View Profile
-                </a>
-              </div>
+        {loading && <p className="mt-4 text-center text-gray-600">Loading...</p>}
+        {error && <p className="mt-4 text-center text-red-600 font-medium">{error}</p>}
+
+        {user && (
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow-sm flex items-center gap-4">
+            <img src={user.avatar_url} alt="Avatar" className="w-16 h-16 rounded-full" />
+            <div>
+              <h2 className="text-lg font-bold text-gray-800">{user.login}</h2>
+              <a
+                href={user.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline text-sm"
+              >
+                View GitHub Profile →
+              </a>
             </div>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
