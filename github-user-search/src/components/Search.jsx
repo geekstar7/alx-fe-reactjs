@@ -15,7 +15,8 @@ const Search = () => {
     setUsers([]);
     setLoading(true);
     try {
-      const results = await fetchAdvancedUsers({ username, location, minRepos });
+      const results = await fetchUserData(username);
+
       setUsers(results);
     } catch (err) {
       setError("Looks like we cant find the user");
