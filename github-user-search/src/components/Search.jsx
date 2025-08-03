@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { fetchUserData } from '../services/githubService';
 
-const SearchBar = () => {
+const Search = () => {
   const [username, setUsername] = useState('');
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ const SearchBar = () => {
       const userData = await fetchUserData(username);
       setUser(userData);
     } catch (err) {
-      setError('Looks like we can’t find the user');
+      setError("Looks like we cant find the user"); // ✅ required message
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,7 @@ const SearchBar = () => {
       </form>
 
       {loading && <p>Loading...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>} {/* ✅ this shows the required error */}
       {user && (
         <div style={{ marginTop: '2rem' }}>
           <img
@@ -60,4 +60,4 @@ const SearchBar = () => {
   );
 };
 
-export default SearchBar;
+export default Search;
