@@ -3,7 +3,7 @@ import { fetchUserData } from '../services/githubService';
 
 const Search = () => {
   const [username, setUsername] = useState('');
-  const [user, setUser] = useState(null);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -11,13 +11,13 @@ const Search = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    setUser(null);
+    setUsers([]);
 
     try {
       const result = await fetchUserData(username);
-      setUser(result[0]);
+      setUsers(result); // 👈 now expecting an array of users
     } catch {
-      setError("Looks like we cant find the user"); // ✅ Straight apostrophe
+      setError("Looks like we cant find the user");
     } finally {
       setLoading(false);
     }
@@ -47,20 +47,31 @@ const Search = () => {
         {loading && <p className="mt-4 text-center text-gray-600">Loading...</p>}
         {error && <p className="mt-4 text-center text-red-600 font-medium">{error}</p>}
 
-        {user && (
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow-sm flex items-center gap-4">
-            <img src={user.avatar_url} alt="Avatar" className="w-16 h-16 rounded-full" />
-            <div>
-              <h2 className="text-lg font-bold text-gray-800">{user.login}</h2>
-              <a
-                href={user.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline text-sm"
+        {users.length > 0 && (
+          <div className="mt-6 space-y-4">
+            {users.map((user) => (
+              <div
+                key={user.id}
+                className="p-4 bg-gray-50 rounded-lg shadow-sm flex items-center gap-4"
               >
-                View GitHub Profile →
-              </a>
-            </div>
+                <img
+                  src={user.avatar_url}
+                  alt="Avatar"
+                  className="w-16 h-16 rounded-full"
+                />
+                <div>
+                  <h2 className="text-lg font-bold text-gray-800">{user.login}</h2>
+                  <a
+                    href={user.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline text-sm"
+                  >
+                    View GitHub Profile →
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
