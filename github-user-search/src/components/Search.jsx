@@ -17,7 +17,7 @@ const Search = () => {
       const result = await fetchUserData(username);
       setUser(result[0]);
     } catch {
-      setError('Looks like we can’t find the user');
+      setError("Looks like we cant find the user"); // ✅ Straight apostrophe
     } finally {
       setLoading(false);
     }
@@ -69,4 +69,3 @@ const Search = () => {
 };
 
 export default Search;
-
