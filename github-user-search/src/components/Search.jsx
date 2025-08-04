@@ -3,6 +3,7 @@ import { fetchUserData } from '../services/githubService';
 
 const Search = () => {
   const [username, setUsername] = useState('');
+  const [location, setLocation] = useState('');
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -14,8 +15,12 @@ const Search = () => {
     setUsers([]);
 
     try {
-      const result = await fetchUserData(username);
-      setUsers(result); // 👈 now expecting an array of users
+      const result = await fetchUserData(username, location);
+      if (result.length === 0) {
+        setError("Looks like we cant find the user");
+      } else {
+        setUsers(result);
+      }
     } catch {
       setError("Looks like we cant find the user");
     } finally {
@@ -31,21 +36,28 @@ const Search = () => {
         <form onSubmit={handleSearch} className="flex flex-col gap-4">
           <input
             type="text"
-            className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3 border rounded-lg"
             placeholder="Enter GitHub username..."
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
+          <input
+            type="text"
+            className="p-3 border rounded-lg"
+            placeholder="Filter by location (optional)..."
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition-all"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold"
           >
             Search
           </button>
         </form>
 
         {loading && <p className="mt-4 text-center text-gray-600">Loading...</p>}
-        {error && <p className="mt-4 text-center text-red-600 font-medium">{error}</p>}
+        {error && <p className="mt-4 text-center text-red-600">{error}</p>}
 
         {users.length > 0 && (
           <div className="mt-6 space-y-4">
@@ -60,7 +72,7 @@ const Search = () => {
                   className="w-16 h-16 rounded-full"
                 />
                 <div>
-                  <h2 className="text-lg font-bold text-gray-800">{user.login}</h2>
+                  <h2 className="text-lg font-bold">{user.login}</h2>
                   <a
                     href={user.html_url}
                     target="_blank"
