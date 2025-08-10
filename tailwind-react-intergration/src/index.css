@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/* Custom global styles */
+body {
+  @apply bg-gray-100 text-gray-900;
+}
+
+h1 {
+  @apply font-bold text-3xl;
+}
