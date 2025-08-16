@@ -1,42 +1,35 @@
-import React, { useState, useEffect } from "react";
-import recipesData from "../data.json";
+import React from "react";
+import RecipeList from "./RecipeList";
 
-const HomePage = () => {
-  const [recipes, setRecipes] = useState([]);
-
-  useEffect(() => {
-    setRecipes(recipesData);
-  }, []);
+function HomePage() {
+  // Dummy recipe data
+  const recipes = [
+    {
+      id: 1,
+      title: "Spaghetti Bolognese",
+      description: "A classic Italian pasta dish with rich meat sauce.",
+      image: "https://source.unsplash.com/400x300/?pasta",
+    },
+    {
+      id: 2,
+      title: "Chicken Curry",
+      description: "A flavorful curry with tender chicken pieces.",
+      image: "https://source.unsplash.com/400x300/?curry",
+    },
+    {
+      id: 3,
+      title: "Vegetable Stir Fry",
+      description: "Quick and healthy stir fry with fresh vegetables.",
+      image: "https://source.unsplash.com/400x300/?vegetables",
+    },
+  ];
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">Recipe Sharing Platform</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {recipes.map((recipe) => (
-          <div
-            key={recipe.id}
-            className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-          >
-            <img
-              src={recipe.image}
-              alt={recipe.title}
-              className="w-full h-48 object-cover"
-            />
-            <div className="p-4">
-              <h2 className="text-xl font-semibold mb-2">{recipe.title}</h2>
-              <p className="text-gray-600">{recipe.summary}</p>
-              <a
-                href={`/recipes/${recipe.id}`}
-                className="text-blue-500 hover:underline mt-2 inline-block"
-              >
-                View Recipe
-              </a>
-            </div>
-          </div>
-        ))}
-      </div>
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Featured Recipes</h1>
+      <RecipeList recipes={recipes} />
     </div>
   );
-};
+}
 
 export default HomePage;
