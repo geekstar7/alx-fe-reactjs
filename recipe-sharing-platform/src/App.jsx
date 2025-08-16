@@ -1,12 +1,22 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./components/HomePage";
-import "./index.css"; // make sure Tailwind styles are included
+import RecipeDetail from "./components/RecipeDetail";
+import "./index.css";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <HomePage />
-    </div>
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-50">
+        <Routes>
+          {/* Home Page */}
+          <Route path="/" element={<HomePage />} />
+
+          {/* Recipe Detail Page */}
+          <Route path="/recipe/:id" element={<RecipeDetail />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
