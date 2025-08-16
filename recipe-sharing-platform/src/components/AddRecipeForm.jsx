@@ -6,85 +6,78 @@ const AddRecipeForm = () => {
   const [steps, setSteps] = useState("");
   const [errors, setErrors] = useState({});
 
-  // ✅ Validation function
   const validate = () => {
-    let formErrors = {};
-
-    if (!title.trim()) formErrors.title = "Title is required.";
-    if (!ingredients.trim()) {
-      formErrors.ingredients = "Ingredients are required.";
-    } else {
-      const ingredientList = ingredients.split(",");
-      if (ingredientList.length < 2) {
-        formErrors.ingredients = "Please provide at least two ingredients.";
-      }
-    }
-    if (!steps.trim()) formErrors.steps = "Preparation steps are required.";
-
-    return formErrors;
+    const newErrors = {};
+    if (!title.trim()) newErrors.title = "Recipe title is required.";
+    if (!ingredients.trim()) newErrors.ingredients = "Ingredients are required.";
+    else if (ingredients.split(",").length < 2)
+      newErrors.ingredients = "Please list at least two ingredients (comma separated).";
+    if (!steps.trim()) newErrors.steps = "Preparation steps are required.";
+    return newErrors;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formErrors = validate(); // ✅ use validate here
-    setErrors(formErrors);
-
-    if (Object.keys(formErrors).length === 0) {
-      alert("Recipe submitted successfully!");
-      // Reset fields
-      setTitle("");
-      setIngredients("");
-      setSteps("");
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
     }
+    console.log({ title, ingredients, steps });
+    setTitle("");
+    setIngredients("");
+    setSteps("");
+    setErrors({});
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-bold mb-4 text-center">Add a New Recipe</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Title Field */}
-        <div>
-          <label className="block font-medium">Recipe Title</label>
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 md:p-10"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center">Add a New Recipe</h2>
+
+        {/* Recipe Title */}
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">Recipe Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter recipe title"
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
-          {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
+          {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
         </div>
 
-        {/* Ingredients Field */}
-        <div>
-          <label className="block font-medium">Ingredients</label>
+        {/* Ingredients */}
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">Ingredients (comma separated)</label>
           <textarea
             value={ingredients}
             onChange={(e) => setIngredients(e.target.value)}
-            className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter ingredients separated by commas"
-          />
-          {errors.ingredients && (
-            <p className="text-red-500 text-sm">{errors.ingredients}</p>
-          )}
+            rows="4"
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          ></textarea>
+          {errors.ingredients && <p className="text-red-500 text-sm mt-1">{errors.ingredients}</p>}
         </div>
 
-        {/* Preparation Steps Field */}
-        <div>
-          <label className="block font-medium">Preparation Steps</label>
+        {/* Preparation Steps */}
+        <div className="mb-6">
+          <label className="block text-gray-700 font-medium mb-2">Preparation Steps</label>
           <textarea
             value={steps}
             onChange={(e) => setSteps(e.target.value)}
-            className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter preparation steps"
-          />
-          {errors.steps && <p className="text-red-500 text-sm">{errors.steps}</p>}
+            rows="5"
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          ></textarea>
+          {errors.steps && <p className="text-red-500 text-sm mt-1">{errors.steps}</p>}
         </div>
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition"
+          className="w-full md:w-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg transition duration-200"
         >
           Submit Recipe
         </button>
@@ -94,3 +87,4 @@ const AddRecipeForm = () => {
 };
 
 export default AddRecipeForm;
+
