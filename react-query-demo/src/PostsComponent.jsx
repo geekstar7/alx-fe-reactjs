@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 
-// Named fetch function
+//
 const fetchPosts = async () => {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts"); // ✅ exact URL required
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -10,13 +10,8 @@ const fetchPosts = async () => {
 };
 
 function PostsComponent() {
-  const {
-    data,
-    error,
-    isLoading,
-    isError,
-    refetch,
-  } = useQuery("posts", fetchPosts);
+  // 
+  const { data, error, isLoading, isError } = useQuery("posts", fetchPosts);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -29,7 +24,6 @@ function PostsComponent() {
   return (
     <div>
       <h2>Posts</h2>
-      <button onClick={() => refetch()}>Refetch Posts</button>
       <ul>
         {data.slice(0, 10).map((post) => (
           <li key={post.id}>
