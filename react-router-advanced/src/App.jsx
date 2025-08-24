@@ -1,14 +1,29 @@
+// src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PostsComponent from "./components/PostsComponent";
-import BlogPost from "./components/BlogPost"; // 👈 make sure this file exists
+import Home from "./components/Home";
+import Login from "./components/Login";
+import Profile from "./components/Profile";
+import BlogPost from "./components/BlogPost";
+import ProtectedRoute from "./components/ProtectedRoute"; // 👈 import
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<PostsComponent />} />
-        <Route path="/blog/:id" element={<BlogPost />} /> {/* 👈 now BlogPost is used */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
+        
+        {/* 👇 protected route */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
