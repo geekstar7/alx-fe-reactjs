@@ -1,14 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PostsComponent from "./components/PostsComponent";
-import PostDetail from "./components/PostDetail"; // <- you'll need this
+import BlogPost from "./components/BlogPost"; // 👈 make sure this file exists
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<PostsComponent />} />
-        <Route path="/blog/:id" element={<PostDetail />} /> {/* <- missing route */}
+        <Route path="/blog/:id" element={<BlogPost />} /> {/* 👈 now BlogPost is used */}
       </Routes>
     </Router>
   );
