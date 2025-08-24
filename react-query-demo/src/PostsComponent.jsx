@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 
-// Fetch function
+// Named fetch function
 const fetchPosts = async () => {
   const response = await fetch("https://jsonplaceholder.typicode.com/posts");
   if (!response.ok) {
@@ -11,28 +11,27 @@ const fetchPosts = async () => {
 
 function PostsComponent() {
   const {
-    data: posts,
+    data,
     error,
     isLoading,
     isError,
     refetch,
-    isFetching,
-  } = useQuery("posts", fetchPosts, {
-    staleTime: 1000 * 60, // data considered fresh for 1 min
-    cacheTime: 1000 * 60 * 5, // cache persists 5 mins after unmount
-  });
+  } = useQuery("posts", fetchPosts);
 
-  if (isLoading) return <p>Loading posts...</p>;
-  if (isError) return <p style={{ color: "red" }}>Error: {error.message}</p>;
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p style={{ color: "red" }}>Error: {error.message}</p>;
+  }
 
   return (
     <div>
       <h2>Posts</h2>
-      <button onClick={() => refetch()} disabled={isFetching}>
-        {isFetching ? "Refreshing..." : "Refetch Posts"}
-      </button>
+      <button onClick={() => refetch()}>Refetch Posts</button>
       <ul>
-        {posts.slice(0, 10).map((post) => (
+        {data.slice(0, 10).map((post) => (
           <li key={post.id}>
             <strong>{post.title}</strong>
             <p>{post.body}</p>
