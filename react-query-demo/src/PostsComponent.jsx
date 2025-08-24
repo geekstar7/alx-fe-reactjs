@@ -1,8 +1,7 @@
-import { useQuery } from "react-query";
+;import { useQuery } from "react-query";
 
-// required named function
 const fetchPosts = async () => {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts"); // required URL
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -10,7 +9,6 @@ const fetchPosts = async () => {
 };
 
 function PostsComponent() {
-  // destructure exactly the required fields
   const { data, error, isLoading, isError } = useQuery("posts", fetchPosts);
 
   if (isLoading) {
@@ -18,7 +16,7 @@ function PostsComponent() {
   }
 
   if (isError) {
-    return <p style={{ color: "red" }}>Error: {error.message}</p>;
+    return <p>Error: {error.message}</p>;
   }
 
   return (
@@ -37,4 +35,5 @@ function PostsComponent() {
 }
 
 export default PostsComponent;
+
 
